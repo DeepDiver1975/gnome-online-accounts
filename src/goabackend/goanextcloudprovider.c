@@ -27,27 +27,27 @@
 #include "goahttpclient.h"
 #include "goaprovider.h"
 #include "goaprovider-priv.h"
-#include "goaowncloudprovider.h"
+#include "goanextcloudprovider.h"
 #include "goaobjectskeletonutils.h"
 #include "goautils.h"
 
-struct _GoaOwncloudProvider
+struct _GoanextcloudProvider
 {
   GoaProvider parent_instance;
 };
 
-typedef struct _GoaOwncloudProviderClass GoaOwncloudProviderClass;
+typedef struct _GoanextcloudProviderClass GoanextcloudProviderClass;
 
-struct _GoaOwncloudProviderClass
+struct _GoanextcloudProviderClass
 {
   GoaProviderClass parent_class;
 };
 
-G_DEFINE_TYPE_WITH_CODE (GoaOwncloudProvider, goa_owncloud_provider, GOA_TYPE_PROVIDER,
+G_DEFINE_TYPE_WITH_CODE (GoanextcloudProvider, goa_nextcloud_provider, GOA_TYPE_PROVIDER,
                          goa_provider_ensure_extension_points_registered ();
                          g_io_extension_point_implement (GOA_PROVIDER_EXTENSION_POINT_NAME,
 							 g_define_type_id,
-							 GOA_OWNCLOUD_NAME,
+							 GOA_NEXTCLOUD_NAME,
 							 0));
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -59,13 +59,13 @@ static const gchar *WEBDAV_ENDPOINT = "remote.php/webdav/";
 static const gchar *
 get_provider_type (GoaProvider *provider)
 {
-  return GOA_OWNCLOUD_NAME;
+  return GOA_NEXTCLOUD_NAME;
 }
 
 static gchar *
 get_provider_name (GoaProvider *provider, GoaObject *object)
 {
-  return g_strdup(_("ownCloud"));
+  return g_strdup(_("Nextcloud"));
 }
 
 static GoaProviderGroup
@@ -160,7 +160,7 @@ build_object (GoaProvider         *provider,
   gchar *uri_string = NULL;
 
   /* Chain up */
-  if (!GOA_PROVIDER_CLASS (goa_owncloud_provider_parent_class)->build_object (provider,
+  if (!GOA_PROVIDER_CLASS (goa_nextcloud_provider_parent_class)->build_object (provider,
                                                                               object,
                                                                               key_file,
                                                                               group,
@@ -733,7 +733,7 @@ add_account (GoaProvider    *provider,
         }
 
       markup = g_strdup_printf ("<b>%s:</b>\n%s",
-                                _("Error connecting to ownCloud server"),
+                                _("Error connecting to nextcloud server"),
                                 data.error->message);
       g_clear_error (&data.error);
 
@@ -828,7 +828,7 @@ refresh_account (GoaProvider    *provider,
   gchar *uri_webdav = NULL;
   gint response;
 
-  g_return_val_if_fail (GOA_IS_OWNCLOUD_PROVIDER (provider), FALSE);
+  g_return_val_if_fail (GOA_IS_NEXTCLOUD_PROVIDER (provider), FALSE);
   g_return_val_if_fail (GOA_IS_CLIENT (client), FALSE);
   g_return_val_if_fail (GOA_IS_OBJECT (object), FALSE);
   g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), FALSE);
@@ -921,7 +921,7 @@ refresh_account (GoaProvider    *provider,
       gchar *markup;
 
       markup = g_strdup_printf ("<b>%s:</b>\n%s",
-                                _("Error connecting to ownCloud server"),
+                                _("Error connecting to nextcloud server"),
                                 data.error->message);
       g_clear_error (&data.error);
 
@@ -1008,12 +1008,12 @@ refresh_account (GoaProvider    *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-goa_owncloud_provider_init (GoaOwncloudProvider *self)
+goa_nextcloud_provider_init (GoanextcloudProvider *self)
 {
 }
 
 static void
-goa_owncloud_provider_class_init (GoaOwncloudProviderClass *klass)
+goa_nextcloud_provider_class_init (GoanextcloudProviderClass *klass)
 {
   GoaProviderClass *provider_class;
 
